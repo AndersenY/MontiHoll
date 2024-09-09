@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="reset.css">
+    <link rel="stylesheet" href="style.css">
+
+    <title>Парадокс Монти-Холла</title>
+</head>
+<body>
+
+    <main class="main" id="main">
+
+        <section class="about common-section" id="about">
+            <div class="container">
+                <div class="title-wrapper">
+                    <h3 class="title show" id="first_step">Выберите дверь</h3>
+                    <h3 class="title no_show" id="second_step">Вы уверены?</h3>
+                    <h3 class="title no_show" id="win">Победа!</h3>
+                    <h3 class="title no_show" id="lose">Неудача!</h3>
+
+                </div>
+                <div class="cards-wrapper">
+                    <div class="card" onclick="choose_the_door(this)" id="RedCard">
+                           <img class ="closed show" src="images/RedClosed2.png" alt="">
+                           <img class ="opened no_show goat_door" src="images/RedOpen2.png" alt="">
+                    </div>
+                    <div class="card" onclick="choose_the_door(this)" id="BlueCard">
+                        <img class ="closed show" src="images/BlueClosed2.png" alt="">
+                        <img class ="opened no_show goat_door" src="images/BlueOpen2.png" alt="">
+                    </div>
+                     <div class="card" onclick="choose_the_door(this)" id="GreenCard">
+                        <img class ="closed show" src="images/GreenClosed2.png" alt="">
+                        <img class ="opened no_show goat_door" src="images/GreenOpen2.png" alt="">
+                    </div>
+                </div>
+                <div class="stats-block">
+                    <div class="stat-item center">Количество игр: <span id="total-games"></span></div>
+                    <div class="stat-item right">Выигрыши без перемены двери: <span id="wins-no-switch"></span></div>
+                    <div class="stat-item right">Проигрыши без перемены двери: <span id="losses-no-switch"></span></div>
+                    <div class="stat-item left">Выигрыши с переменой двери: <span id="wins-switch"></span></div>
+                    <div class="stat-item left">Проигрыши с переменой двери: <span id="losses-switch"></span></div>
+                </div>
+            </div>
+        </section>
+    </main>
+        <!-- <script src="goat_car.js"></script> -->
+<!--    <script src="show2step.js"></script>-->
+    <script src="show.js"></script>
+</body>
+</html>

@@ -1,0 +1,146 @@
+var is_second_choice = false;
+var is_game_end = false;
+var card_id;
+var first_open_card_id;
+
+var games_count = 0;
+var win_without_change_count = 0;
+var win_with_change_count = 0;
+var lose_without_change_count = 0;
+var lose_with_change_count = 0;
+
+document.getElementById('total-games').textContent = games_count;
+document.getElementById('wins-no-switch').textContent = win_without_change_count;
+document.getElementById('losses-no-switch').textContent = lose_without_change_count;
+document.getElementById('wins-switch').textContent = win_with_change_count;
+document.getElementById('losses-switch').textContent = lose_with_change_count;
+
+shuffle_the_doors();
+
+function set_no_show(elem){
+    elem.classList.remove('show');
+    elem.classList.add('no_show');
+}
+
+function set_show(elem){
+    elem.classList.remove('no_show');
+    elem.classList.add('show');
+}
+
+function shuffle_the_doors(){
+    const reset_doors = document.querySelectorAll('.opened');
+    reset_doors.forEach(door => {
+        door.classList.remove('car_door');
+        door.classList.add('goat_door');
+    });
+
+    const goatDoors = document.querySelectorAll('.goat_door');
+
+    const randomIndex = Math.floor(Math.random() * goatDoors.length);
+    const selectedDoor = goatDoors[randomIndex];
+
+    selectedDoor.classList.remove('goat_door');
+    selectedDoor.classList.add('car_door');
+}
+
+function open_door(card){
+    card.querySelectorAll('.opened').forEach(opened_door => {
+        opened_door.classList.toggle('no_show');
+        opened_door.classList.toggle('show');
+    });
+
+    card.querySelectorAll('.closed').forEach(closed_door => {
+        closed_door.classList.toggle('no_show');
+        closed_door.classList.toggle('show');
+    });
+}
+
+
+function open_door_with_goat(card){
+
+    const cards = document.querySelectorAll('.card');
+    const other_cards = Array.from(cards).filter(item => item !== card);
+    const goat_door_cards = other_cards.filter(item => !item.querySelector('.car_door'));
+    const random_index = Math.floor(Math.random() * goat_door_cards.length);
+    const selected_card = goat_door_cards[random_index];
+
+    selected_card.querySelectorAll('.opened').forEach(opened_door => {
+        opened_door.classList.toggle('no_show');
+        opened_door.classList.toggle('show');
+    });
+
+    selected_card.querySelectorAll('.closed').forEach(closed_door => {
+        closed_door.classList.toggle('no_show');
+        closed_door.classList.toggle('show');
+    });
+
+    return selected_card.id;
+}
+
+function reset_the_game(){
+    is_game_end = false;
+    const cards = document.querySelectorAll('.card');
+    cards.forEach(card => {
+        set_no_show(card.querySelector('.opened'));
+        set_show(card.querySelector('.closed'));
+    });
+
+    set_show(document.getElementById('first_step'));
+    set_no_show(document.getElementById('second_step'));
+    set_no_show(document.getElementById('win'));
+    set_no_show(document.getElementById('lose'));
+    shuffle_the_doors();
+}
+
+function choose_the_door(card){
+    if(is_second_choice==false && is_game_end == false){
+        first_open_card_id = open_door_with_goat(card);
+
+        set_no_show(document.getElementById("first_step"));
+        set_show(document.getElementById("second_step"));
+
+        card_id = card.id;
+        is_second_choice=true;
+    }
+    else if(is_second_choice==true && is_game_end == false && first_open_card_id!=card.id){
+        open_door(card);
+        set_no_show(document.getElementById("second_step"));
+
+
+        if(card.querySelector('.car_door')!=null){
+            set_show(document.getElementById("win"));
+
+            if(card_id==card.id)
+                win_without_change_count++;
+            else
+                win_with_change_count++;
+        }
+        else{
+            set_show(document.getElementById("lose"));
+
+            if(card_id==card.id)
+                lose_without_change_count++;
+            else
+                lose_with_change_count++;
+        }
+        
+        is_game_end = true;
+
+        setTimeout(() => {
+            games_count++;
+            reset_the_game();
+
+            document.getElementById('total-games').textContent = games_count;
+            document.getElementById('wins-no-switch').textContent = win_without_change_count;
+            document.getElementById('losses-no-switch').textContent = lose_without_change_count;
+            document.getElementById('wins-switch').textContent = win_with_change_count;
+            document.getElementById('losses-switch').textContent = lose_with_change_count;
+
+
+            is_second_choice=false;
+        }, 1500);
+
+        
+
+    }
+}
